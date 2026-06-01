@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>埼玉大学 物理学PG 口述試験 問題集</title>
+<script>
+MathJax = { tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] }, startup: { typeset: false } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root {
+    --primary: #1a237e;
+    --primary-light: #3949ab;
+    --secondary: #00695c;
+    --secondary-light: #00897b;
+    --bg: #f5f6fa;
+    --card-bg: #ffffff;
+    --text: #212121;
+    --text-light: #757575;
+    --border: #e0e0e0;
+    --easy: #2e7d32;
+    --easy-bg: #e8f5e9;
+    --normal: #e65100;
+    --normal-bg: #fff3e0;
+    --hard: #b71c1c;
+    --hard-bg: #ffebee;
+    --checked-bg: #e8eaf6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  header h1 { font-size: 1.25rem; font-weight: 700; }
+  header p { font-size: 0.8rem; opacity: 0.8; margin-top: 2px; }
+  .container { max-width: 900px; margin: 0 auto; padding: 16px; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+  .tab-btn {
+    flex: 1; padding: 10px 16px; border: none; border-radius: 8px 8px 0 0;
+    cursor: pointer; font-size: 0.95rem; font-weight: 600;
+    background: #c5cae9; color: #3949ab; transition: all 0.2s;
+  }
+  .tab-btn.active { background: var(--primary); color: white; }
+  .tab-btn:hover:not(.active) { background: #9fa8da; }
+
+  /* Controls */
+  .controls {
+    background: var(--card-bg); border-radius: 8px; padding: 12px 16px;
+    margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .controls label { font-size: 0.85rem; color: var(--text-light); }
+  .controls select, .controls input[type=text] {
+    padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 0.85rem; background: var(--bg); color: var(--text);
+  }
+  .progress-bar-wrap { flex: 1; min-width: 160px; }
+  .progress-label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 4px; }
+  .progress-bar {
+    height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; background: var(--primary-light); transition: width 0.3s; }
+  .btn-reset {
+    padding: 6px 14px; background: #ef9a9a; border: none; border-radius: 6px;
+    cursor: pointer; font-size: 0.82rem; color: #b71c1c; font-weight: 600;
+  }
+  .btn-reset:hover { background: #e57373; }
+
+  /* Stats */
+  .stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .stat-chip {
+    padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+    background: var(--card-bg); border: 1px solid var(--border);
+  }
+
+  /* Problem list */
+  .problem-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .problem-card {
+    background: var(--card-bg); border-radius: 10px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); transition: box-shadow 0.2s;
+    border-left: 4px solid transparent;
+  }
+  .problem-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+  .problem-card.checked { background: var(--checked-bg); border-left-color: var(--primary-light); }
+
+  .problem-header {
+    display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+    cursor: pointer; user-select: none;
+  }
+  .problem-num {
+    font-size: 0.75rem; font-weight: 700; color: white; background: var(--primary-light);
+    border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .problem-card.checked .problem-num { background: var(--secondary-light); }
+  .problem-meta { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+  .badge {
+    padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 600;
+  }
+  .badge-cat { background: #e8eaf6; color: #3949ab; }
+  .badge-easy { background: var(--easy-bg); color: var(--easy); }
+  .badge-normal { background: var(--normal-bg); color: var(--normal); }
+  .badge-hard { background: var(--hard-bg); color: var(--hard); }
+
+  .problem-title { flex: 1; font-size: 0.92rem; font-weight: 600; line-height: 1.4; }
+  .expand-icon { font-size: 0.8rem; color: var(--text-light); flex-shrink: 0; }
+  .check-btn {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border);
+    background: white; cursor: pointer; flex-shrink: 0; display: flex;
+    align-items: center; justify-content: center; font-size: 0.8rem;
+    transition: all 0.15s;
+  }
+  .check-btn:hover { border-color: var(--secondary-light); }
+  .problem-card.checked .check-btn {
+    background: var(--secondary-light); border-color: var(--secondary-light); color: white;
+  }
+
+  .problem-body {
+    display: none; padding: 0 16px 14px 16px; border-top: 1px solid var(--border);
+  }
+  .problem-body.open { display: block; }
+  .problem-text { font-size: 0.9rem; line-height: 1.9; margin-top: 10px; }
+  .hint-section { margin-top: 12px; }
+  .hint-toggle {
+    background: none; border: 1px solid var(--border); border-radius: 6px;
+    padding: 5px 12px; cursor: pointer; font-size: 0.8rem; color: var(--text-light);
+  }
+  .hint-toggle:hover { background: var(--bg); }
+  .hint-body { display: none; margin-top: 8px; padding: 10px 12px; background: #fffde7;
+    border-left: 3px solid #f9a825; border-radius: 0 6px 6px 0; font-size: 0.85rem; line-height: 1.8; }
+  .hint-body.open { display: block; }
+
+  .no-results { text-align: center; padding: 40px; color: var(--text-light); }
+
+  /* Sync bar */
+  .sync-bar {
+    background: var(--card-bg); border-radius: 8px; padding: 10px 16px;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-size: 0.85rem;
+  }
+  .sync-bar-label { color: var(--text-light); font-weight: 600; margin-right: 2px; }
+  .sync-btn {
+    padding: 6px 14px; border: none; border-radius: 6px; cursor: pointer;
+    font-size: 0.83rem; font-weight: 600; transition: opacity 0.15s;
+  }
+  .sync-btn:disabled { opacity: 0.5; cursor: default; }
+  .btn-export { background: #1a237e; color: white; }
+  .btn-export:hover:not(:disabled) { background: #283593; }
+  .btn-import { background: #e8eaf6; color: #1a237e; }
+  .btn-import:hover:not(:disabled) { background: #c5cae9; }
+  .sync-status {
+    font-size: 0.82rem; padding: 4px 10px; border-radius: 12px; display: none;
+  }
+  .sync-status.ok  { display: inline-block; background: #e8f5e9; color: #2e7d32; }
+  .sync-status.err { display: inline-block; background: #ffebee; color: #b71c1c; }
+  .sync-status.loading { display: inline-block; background: #fff3e0; color: #e65100; }
+
+  /* Answer upload section */
+  .answer-section-outer {
+    margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 12px;
+  }
+  .answer-section-label {
+    font-size: 0.78rem; font-weight: 700; color: var(--text-light);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;
+  }
+  .upload-area {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border: 2px dashed var(--border); border-radius: 8px;
+    cursor: pointer; font-size: 0.85rem; color: var(--text-light);
+    background: var(--bg); transition: all 0.2s;
+  }
+  .upload-area:hover { border-color: var(--primary-light); color: var(--primary-light); background: #eef0fb; }
+  .answer-file-row {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 12px; background: var(--bg); border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .answer-file-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .answer-filename {
+    flex: 1; font-size: 0.85rem; font-weight: 600; color: var(--text);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;
+  }
+  .answer-thumb {
+    width: 60px; height: 60px; object-fit: cover; border-radius: 6px;
+    border: 1px solid var(--border); cursor: pointer; flex-shrink: 0;
+  }
+  .answer-btn {
+    padding: 5px 12px; border-radius: 6px; border: none;
+    cursor: pointer; font-size: 0.8rem; font-weight: 600;
+  }
+  .answer-view-btn { background: var(--primary-light); color: white; }
+  .answer-view-btn:hover { background: var(--primary); }
+  .answer-del-btn { background: #ffcdd2; color: #c62828; }
+  .answer-del-btn:hover { background: #ef9a9a; }
+  .answer-badge {
+    font-size: 0.7rem; padding: 1px 6px; border-radius: 10px;
+    background: #e8f5e9; color: #2e7d32; font-weight: 700; flex-shrink: 0;
+  }
+
+  /* Image lightbox */
+  .lightbox-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 9999; align-items: center; justify-content: center;
+  }
+  .lightbox-overlay.open { display: flex; }
+  .lightbox-img { max-width: 92vw; max-height: 92vh; border-radius: 4px; }
+  .lightbox-close {
+    position: absolute; top: 16px; right: 20px; color: white; font-size: 2rem;
+    cursor: pointer; background: none; border: none; line-height: 1;
+  }
+
+  /* PDF modal */
+  .pdf-modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    z-index: 9999; flex-direction: column;
+  }
+  .pdf-modal-overlay.open { display: flex; }
+  .pdf-modal-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px; background: #263238; color: white; flex-shrink: 0;
+    gap: 12px;
+  }
+  .pdf-modal-title { font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pdf-modal-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .pdf-modal-btn {
+    padding: 5px 14px; border-radius: 6px; border: none; cursor: pointer;
+    font-size: 0.82rem; font-weight: 600;
+  }
+  .pdf-dl-btn { background: #80cbc4; color: #004d40; }
+  .pdf-close-btn { background: #ef9a9a; color: #b71c1c; }
+  .pdf-modal-frame { flex: 1; width: 100%; border: none; background: #525659; }
+
+  @media (max-width: 600px) {
+    .problem-header { flex-wrap: wrap; }
+    .problem-title { width: 100%; order: 3; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>埼玉大学 物理学PG 口述試験 問題集</h1>
+  <p>博士前期課程 ｜ 熱・統計力学 / 量子力学 ｜ 各50問</p>
+</header>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('thermo')">🌡 熱・統計力学（50問）</button>
+    <button class="tab-btn" onclick="switchTab('quantum')">⚛ 量子力学（50問）</button>
+  </div>
+
+  <div class="controls">
+    <label>難易度:
+      <select id="filter-level" onchange="applyFilters()">
+        <option value="">すべて</option>
+        <option value="基礎">基礎</option>
+        <option value="標準">標準</option>
+        <option value="応用">応用</option>
+      </select>
+    </label>
+    <label>カテゴリ:
+      <select id="filter-cat" onchange="applyFilters()">
+        <option value="">すべて</option>
+      </select>
+    </label>
+    <label>🔍
+      <input type="text" id="search-input" placeholder="キーワード検索" oninput="applyFilters()" style="width:160px">
+    </label>
+    <div class="progress-bar-wrap">
+      <div class="progress-label" id="progress-label">進捗: 0 / 50</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <button class="btn-reset" onclick="resetProgress()">リセット</button>
+  </div>
+
+  <div class="sync-bar">
+    <span class="sync-bar-label">バックアップ：</span>
+    <button class="sync-btn btn-export" id="btn-export" onclick="exportData()">エクスポート（保存）</button>
+    <label class="sync-btn btn-import" style="cursor:pointer">
+      インポート（復元）
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(this)">
+    </label>
+    <span class="sync-status" id="sync-status"></span>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="problem-list" id="problem-list"></div>
+</div>
+
+<!-- Image lightbox -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+</div>
+
+<!-- PDF modal -->
+<div class="pdf-modal-overlay" id="pdf-modal">
+  <div class="pdf-modal-bar">
+    <span class="pdf-modal-title" id="pdf-modal-title"></span>
+    <div class="pdf-modal-actions">
+      <a class="pdf-modal-btn pdf-dl-btn" id="pdf-dl-link" download="">ダウンロード</a>
+      <button class="pdf-modal-btn pdf-close-btn" onclick="closePdfModal()">閉じる</button>
+    </div>
+  </div>
+  <iframe class="pdf-modal-frame" id="pdf-modal-frame" src=""></iframe>
+</div>
+
+
+<script>
+const THERMO = [
+  // ── 熱力学基礎 ──
+  {
+    id:'T1', num:1, cat:'熱力学基礎', level:'基礎',
+    title:'熱力学の第0法則と温度の定義',
+    text:'熱力学の第0法則を述べ、それが「温度」という概念をどのように正当化するかを説明せよ。',
+    hint:'熱平衡の推移律に着目する。もし $A$ と $B$ が熱平衡にあり、$B$ と $C$ が熱平衡にあれば…'
+  },
+  {
+    id:'T2', num:2, cat:'熱力学基礎', level:'基礎',
+    title:'熱力学第1法則とその意味',
+    text:'熱力学第1法則 $dU = \\delta Q - \\delta W$ を述べ、内部エネルギー $U$ が状態量である理由を説明せよ。また、$\\delta Q$ と $\\delta W$ が完全微分でない理由も述べよ。',
+    hint:'経路に依存する量と状態に依存する量の違いを考える。サイクルを回して $\\oint \\delta Q \\neq 0$ となる例を示すと良い。'
+  },
+  {
+    id:'T3', num:3, cat:'熱力学基礎', level:'基礎',
+    title:'熱力学第2法則とエントロピーの増大則',
+    text:'クラウジウスの原理またはトムソンの原理を述べ、そこからエントロピー $S$ の概念を導入せよ。孤立系のエントロピーが増大する理由を述べよ。',
+    hint:'可逆過程では $\\oint \\frac{\\delta Q}{T} = 0$、不可逆過程では $< 0$（クラウジウスの不等式）。'
+  },
+  {
+    id:'T4', num:4, cat:'熱力学基礎', level:'基礎',
+    title:'カルノーサイクルと効率',
+    text:'カルノーサイクルの4つのステップを説明し、熱効率 $\\eta = 1 - T_2/T_1$ を導け。この効率がすべての可逆サイクルで同じになることを述べよ。',
+    hint:'等温膨張・断熱膨張・等温圧縮・断熱圧縮の4過程。$W = Q_1 - Q_2$ から出発する。'
+  },
+  {
+    id:'T5', num:5, cat:'熱力学基礎', level:'基礎',
+    title:'熱力学ポテンシャルと自然な変数',
+    text:'内部エネルギー $U(S,V)$、ヘルムホルツ自由エネルギー $F(T,V)$、エンタルピー $H(S,P)$、ギブス自由エネルギー $G(T,P)$ の定義と自然な変数を示し、各々が最小になる条件（平衡条件）を述べよ。',
+    hint:'ルジャンドル変換で互いに移り変わる。各ポテンシャルの全微分を書き、係数を読み取る。'
+  },
+  {
+    id:'T6', num:6, cat:'熱力学基礎', level:'標準',
+    title:'マクスウェルの関係式',
+    text:'ヘルムホルツ自由エネルギーから出発して、マクスウェルの関係式 $\\left(\\frac{\\partial S}{\\partial V}\\right)_T = \\left(\\frac{\\partial P}{\\partial T}\\right)_V$ を導け。他の3つのマクスウェル関係式も列挙せよ。',
+    hint:'$dF = -SdT - PdV$ で、混合偏微分が交換可能なことを使う。'
+  },
+  {
+    id:'T7', num:7, cat:'熱力学基礎', level:'標準',
+    title:'比熱の定義と関係式',
+    text:'定積比熱 $C_V$ と定圧比熱 $C_P$ を定義し、$C_P - C_V = \\frac{TV\\alpha^2}{\\kappa_T}$（ここで $\\alpha$ は熱膨張率、$\\kappa_T$ は等温圧縮率）を示せ。理想気体での結果を確認せよ。',
+    hint:'$C_P - C_V = \\left[P + \\left(\\frac{\\partial U}{\\partial V}\\right)_T\\right]\\left(\\frac{\\partial V}{\\partial T}\\right)_P$ から出発。'
+  },
+  {
+    id:'T8', num:8, cat:'熱力学基礎', level:'標準',
+    title:'ジュール・トムソン効果',
+    text:'ジュール・トムソン効果（絞り過程）を説明し、エンタルピーが保存されることを示せ。ジュール・トムソン係数 $\\mu_{JT} = \\left(\\frac{\\partial T}{\\partial P}\\right)_H$ を求め、理想気体で $\\mu_{JT} = 0$ となることを確認せよ。',
+    hint:'定常流過程でのエンタルピー保存 $H_1 = H_2$ の導出から始める。'
+  },
+  // ── 気体理論 ──
+  {
+    id:'T9', num:9, cat:'気体理論', level:'基礎',
+    title:'理想気体の状態方程式と気体分子運動論',
+    text:'気体分子運動論から出発して、理想気体の状態方程式 $PV = nRT$ を導け。分子の平均運動エネルギーと温度の関係を示せ。',
+    hint:'$P = \\frac{Nm\\langle v^2 \\rangle}{3V}$ の導出がカギ。$\\langle v^2 \\rangle$ と $T$ の関係からへと繋げる。'
+  },
+  {
+    id:'T10', num:10, cat:'気体理論', level:'基礎',
+    title:'マクスウェル-ボルツマン速度分布',
+    text:'マクスウェル-ボルツマン速度分布関数 $f(v)$ を書き、最確速度・平均速度・二乗平均速度を求めよ。これらの大小関係を示せ。',
+    hint:'$f(v) = 4\\pi n\\left(\\frac{m}{2\\pi k_B T}\\right)^{3/2} v^2 e^{-mv^2/2k_BT}$ から積分。大小関係は $v_p < \\bar{v} < v_{rms}$。'
+  },
+  {
+    id:'T11', num:11, cat:'気体理論', level:'標準',
+    title:'エネルギー等分配の定理',
+    text:'エネルギー等分配の定理を述べ、1原子理想気体・2原子理想気体のモル比熱 $C_V$ をこの定理から求めよ。低温での量子効果（比熱の「凍結」）についても言及せよ。',
+    hint:'各自由度に $\\frac{1}{2}k_BT$ の熱エネルギーが配分される。2原子気体は並進3＋回転2＝5自由度。'
+  },
+  {
+    id:'T12', num:12, cat:'気体理論', level:'標準',
+    title:'ファン・デル・ワールス方程式',
+    text:'ファン・デル・ワールス方程式 $\\left(P + \\frac{a}{V^2}\\right)(V - b) = RT$ を説明し、理想気体からの補正項 $a, b$ の物理的意味を述べよ。また、臨界点の条件を求めよ。',
+    hint:'$a$ は分子間引力、$b$ は分子の有限体積。臨界点では $\\frac{\\partial P}{\\partial V} = \\frac{\\partial^2 P}{\\partial V^2} = 0$。'
+  },
+  // ── 統計力学基礎 ──
+  {
+    id:'T13', num:13, cat:'統計力学基礎', level:'基礎',
+    title:'ボルツマンのエントロピーと統計的解釈',
+    text:'ボルツマンのエントロピー公式 $S = k_B \\ln W$ を述べ、$W$ の意味を説明せよ。理想気体に適用し、熱力学的エントロピーと一致することを示せ。',
+    hint:'$W$ は等エネルギーの微視的状態数（統計的重率）。理想気体の $W$ の計算にはスターリング近似 $\\ln N! \\approx N\\ln N - N$ を用いる。'
+  },
+  {
+    id:'T14', num:14, cat:'統計力学基礎', level:'基礎',
+    title:'ミクロカノニカル・カノニカル・グランドカノニカルアンサンブル',
+    text:'ミクロカノニカル（NVE）・カノニカル（NVT）・グランドカノニカル（µVT）の3つのアンサンブルを比較し、それぞれが適切な状況を述べよ。',
+    hint:'それぞれを特徴付ける保存量（N,V,E），(N,V,T），(µ,V,T) の違いに注目。熱浴・粒子浴との接触の有無。'
+  },
+  {
+    id:'T15', num:15, cat:'統計力学基礎', level:'標準',
+    title:'カノニカルアンサンブルと分配関数',
+    text:'カノニカルアンサンブルにおける分配関数 $Z = \\sum_i e^{-\\beta E_i}$（$\\beta = 1/k_BT$）を導入し、ヘルムホルツ自由エネルギー $F = -k_BT \\ln Z$ との関係を示せ。平均エネルギー・エントロピーをZで表せ。',
+    hint:'$\\langle E \\rangle = -\\frac{\\partial \\ln Z}{\\partial \\beta}$、$S = k_B(\\ln Z + \\beta \\langle E \\rangle)$。'
+  },
+  {
+    id:'T16', num:16, cat:'統計力学基礎', level:'標準',
+    title:'等重率の原理と統計力学の基礎',
+    text:'等重率の原理を述べ、これが統計力学のすべての導出の出発点になることを説明せよ。エルゴード仮説との関連も述べよ。',
+    hint:'孤立系のすべてのアクセス可能な微視的状態は等確率で実現される、という仮定。'
+  },
+  {
+    id:'T17', num:17, cat:'統計力学基礎', level:'応用',
+    title:'熱力学的極限と相対ゆらぎ',
+    text:'カノニカルアンサンブルにおけるエネルギーの相対ゆらぎ $\\frac{\\Delta E}{\\langle E \\rangle}$ が $\\sim N^{-1/2}$ であることを示せ。これが熱力学的極限で0になることの意味を述べよ。',
+    hint:'$\\langle (\\Delta E)^2 \\rangle = k_BT^2 C_V$、$\\langle E \\rangle \\propto N$ から $\\frac{\\Delta E}{\\langle E \\rangle} \\propto N^{-1/2}$。'
+  },
+  // ── 量子統計 ──
+  {
+    id:'T18', num:18, cat:'量子統計', level:'標準',
+    title:'ボース-アインシュタイン統計とフェルミ-ディラック統計',
+    text:'ボース-アインシュタイン分布関数と フェルミ-ディラック分布関数を示し、それぞれが適用される粒子の種類と物理的背景を述べよ。高温（希薄）極限でマクスウェル-ボルツマン統計に帰着することを示せ。',
+    hint:'$\\langle n_i \\rangle = \\frac{1}{e^{\\beta(\\epsilon_i - \\mu)} \\mp 1}$（上がBE、下がFD）。$e^{\\beta(\\epsilon-\\mu)} \\gg 1$ で共通形に。'
+  },
+  {
+    id:'T19', num:19, cat:'量子統計', level:'標準',
+    title:'自由電子モデルとフェルミエネルギー',
+    text:'金属の自由電子モデルで、$T=0$ におけるフェルミエネルギー $E_F$ を電子数密度 $n$ の関数として求めよ。また状態密度 $g(E)$ を導き、$T=0$ の平均エネルギーを計算せよ。',
+    hint:'3次元箱の状態数を $k$ 空間で数える。$E_F = \\frac{\\hbar^2}{2m}(3\\pi^2 n)^{2/3}$。'
+  },
+  {
+    id:'T20', num:20, cat:'量子統計', level:'応用',
+    title:'ゾンマーフェルト展開と低温電子比熱',
+    text:'ゾンマーフェルト展開を用いて、低温（$k_BT \\ll E_F$）での電子の比熱 $C_{el} = \\gamma T$ を導け。デバイモデルによるフォノン比熱 $C_{ph} \\propto T^3$ との比較を述べよ。',
+    hint:'$\\int_0^\\infty g(\\epsilon) f(\\epsilon) d\\epsilon$ をゾンマーフェルト展開。結果 $C_{el} = \\frac{\\pi^2}{3} k_B^2 T g(E_F)$。'
+  },
+  {
+    id:'T21', num:21, cat:'量子統計', level:'応用',
+    title:'ボース-アインシュタイン凝縮',
+    text:'ボース-アインシュタイン凝縮（BEC）の概念を説明し、3次元理想ボース気体でBEC転移温度 $T_c$ を求めよ。$T < T_c$ での凝縮粒子数の温度依存性を示せ。',
+    hint:'$\\mu \\to 0^-$ で化学ポテンシャルの上限に到達したとき凝縮が起きる。$T_c \\propto n^{2/3}$。'
+  },
+  // ── 相転移と臨界現象 ──
+  {
+    id:'T22', num:22, cat:'相転移', level:'標準',
+    title:'相転移の分類とギブスの相律',
+    text:'1次相転移と連続相転移（2次相転移）の違いを説明せよ。また、ギブスの相律 $f = c - p + 2$ を導き、1成分系の相図（水の相図など）に適用せよ。',
+    hint:'1次は潜熱あり・不連続、2次は潜熱なし・比熱等の発散。相律はギブスの自由度の数え方から。'
+  },
+  {
+    id:'T23', num:23, cat:'相転移', level:'標準',
+    title:'ランダウ理論と自発的対称性の破れ',
+    text:'ランダウの平均場理論で秩序変数 $\\phi$ を導入し、$F(T,\\phi) = a(T-T_c)\\phi^2 + b\\phi^4$ の自由エネルギーから2次相転移の挙動を説明せよ。$T < T_c$ での $\\phi$ の値を求めよ。',
+    hint:'$\\frac{\\partial F}{\\partial \\phi} = 0$ で平衡状態を求める。$\\phi \\propto (T_c - T)^{1/2}$ が得られる（臨界指数 $\\beta = 1/2$）。'
+  },
+  {
+    id:'T24', num:24, cat:'相転移', level:'応用',
+    title:'イジングモデルと平均場近似',
+    text:'1次元・2次元イジングモデルを定義し、平均場近似を用いて自己無撞着方程式を導け。1次元では相転移が起きない理由を定性的に述べよ。',
+    hint:'各スピンへの実効磁場を $h_{eff} = zJ\\langle S \\rangle + h$ とおく。1次元は界面のエントロピー利得 $k_B \\ln N$ がエネルギー損失 $2J$ より大きい。'
+  },
+  // ── エントロピーと統計 ──
+  {
+    id:'T25', num:25, cat:'統計力学基礎', level:'標準',
+    title:'ギブスのエントロピーとシャノンエントロピー',
+    text:'ギブスのエントロピー $S = -k_B \\sum_i p_i \\ln p_i$ を定義し、等重率の場合にボルツマンの $S = k_B \\ln W$ に帰着することを示せ。情報理論のシャノンエントロピーとの対応を述べよ。',
+    hint:'$p_i = 1/W$ を代入すると $S = k_B \\ln W$。シャノンエントロピーは $H = -\\sum_i p_i \\log_2 p_i$。'
+  },
+  {
+    id:'T26', num:26, cat:'熱力学基礎', level:'標準',
+    title:'熱力学第3法則',
+    text:'熱力学第3法則（ネルンストの熱定理）を述べ、$T \\to 0$ でエントロピーが有限値に近づくことの意味を説明せよ。$T = 0$ への到達が不可能であることも述べよ。',
+    hint:'完全結晶では $S(0) = 0$（プランクの表現）。$T = 0$ への到達は有限ステップでは不可能。'
+  },
+  // ── 確率過程 ──
+  {
+    id:'T27', num:27, cat:'確率過程', level:'標準',
+    title:'ランダムウォークと拡散',
+    text:'1次元ランダムウォークを考え、N ステップ後の平均変位と平均二乗変位を求めよ。これが拡散方程式 $\\frac{\\partial P}{\\partial t} = D \\nabla^2 P$ と対応していることを示せ。',
+    hint:'$\\langle x \\rangle = 0$、$\\langle x^2 \\rangle = N\\ell^2$ → $D = \\ell^2 / (2\\tau)$。'
+  },
+  {
+    id:'T28', num:28, cat:'確率過程', level:'応用',
+    title:'ランジュバン方程式とアインシュタインの関係',
+    text:'ランジュバン方程式 $m\\dot{v} = -\\gamma v + \\xi(t)$ を説明し、長時間後の速度の分散 $\\langle v^2 \\rangle = k_BT/m$ が成立することを示せ。これからアインシュタインの関係 $D = k_BT/\\gamma$ を導け。',
+    hint:'$\\langle \\xi(t)\\xi(t\') \\rangle = 2\\gamma k_BT \\delta(t-t\')$（揺動散逸定理）を使う。'
+  },
+  // ── 黒体輻射 ──
+  {
+    id:'T29', num:29, cat:'黒体輻射', level:'標準',
+    title:'プランクの黒体輻射公式とその意義',
+    text:'プランクの放射公式 $u(\\nu,T) = \\frac{8\\pi h\\nu^3}{c^3} \\cdot \\frac{1}{e^{h\\nu/k_BT}-1}$ を示し、長波長極限（レイリー-ジーンズ）と短波長極限（ウィーン）への帰着を確認せよ。',
+    hint:'$h\\nu/k_BT \\ll 1$ ではボース分布 $\\to k_BT/h\\nu$（古典極限）、$h\\nu/k_BT \\gg 1$ では $e^{-h\\nu/k_BT}$（ウィーン）。'
+  },
+  {
+    id:'T30', num:30, cat:'黒体輻射', level:'標準',
+    title:'ステファン-ボルツマン則とウィーン変位則',
+    text:'プランクの放射公式を全振動数で積分してステファン-ボルツマン則 $j = \\sigma T^4$ を導け。また、スペクトルが最大となる振動数（波長）の温度依存性（ウィーン変位則）を述べよ。',
+    hint:'$\\int_0^\\infty \\frac{x^3}{e^x - 1}dx = \\frac{\\pi^4}{15}$。ウィーン変位則 $\\lambda_{max} T = \\text{const}$。'
+  },
+  // ── 磁性体の統計力学 ──
+  {
+    id:'T31', num:31, cat:'磁性・格子', level:'標準',
+    title:'スピン系の分配関数と磁化',
+    text:'外部磁場 $h$ 中のスピン $1/2$ の系（$N$ 個）の分配関数を計算し、磁化 $M$ と磁気感受率 $\\chi$ を求めよ。高温極限でキュリー則 $\\chi = C/T$ を確認せよ。',
+    hint:'1スピンの分配関数 $z = 2\\cosh(\\beta \\mu_B h)$。全体は $Z = z^N$。$M = -\\frac{\\partial F}{\\partial h}$。'
+  },
+  {
+    id:'T32', num:32, cat:'磁性・格子', level:'応用',
+    title:'デバイモデルと固体の比熱',
+    text:'デバイモデルにおける状態密度を説明し、低温 ($T \\ll \\theta_D$) と高温 ($T \\gg \\theta_D$) での比熱の振る舞いを求めよ。デュロン-プティの法則との対応を述べよ。',
+    hint:'低温：$C_V = \\frac{12\\pi^4}{5} N k_B \\left(\\frac{T}{\\theta_D}\\right)^3$（デバイ $T^3$ 則）。高温：$C_V \\to 3Nk_B$（古典極限）。'
+  },
+  // ── 輸送現象 ──
+  {
+    id:'T33', num:33, cat:'輸送現象', level:'標準',
+    title:'ボルツマン輸送方程式と緩和時間近似',
+    text:'ボルツマン輸送方程式を書き、緩和時間近似のもとで電気伝導率 $\\sigma = ne^2\\tau/m$ を導け。',
+    hint:'$\\frac{\\partial f}{\\partial t} + v \\cdot \\nabla_r f + F \\cdot \\nabla_p f = -\\frac{f-f_0}{\\tau}$。定常状態で $\\frac{\\partial f}{\\partial t}=0$ として解く。'
+  },
+  {
+    id:'T34', num:34, cat:'輸送現象', level:'応用',
+    title:'フィックの法則とオンサーガーの相反定理',
+    text:'フィックの第1・第2法則を述べよ。オンサーガーの相反定理の概念（熱流と粒子流の結合）を説明し、ゼーベック効果・ペルチェ効果との関係を述べよ。',
+    hint:'$J = -D \\nabla n$（第1法則），$\\frac{\\partial n}{\\partial t} = D \\nabla^2 n$（第2法則）。交差オンサーガー係数の対称性 $L_{ij} = L_{ji}$。'
+  },
+  // ── 熱力学的安定性 ──
+  {
+    id:'T35', num:35, cat:'熱力学基礎', level:'応用',
+    title:'熱力学的安定条件',
+    text:'熱力学的安定性の条件（$C_V > 0$, $\\kappa_T > 0$）を導け。これらが破れるとどのような現象（スピノーダル分解など）が起きるかを説明せよ。',
+    hint:'$S$ の最大化または $F$ の最小化から安定条件を導く。$\\left(\\frac{\\partial^2 F}{\\partial V^2}\\right)_T > 0 \\Leftrightarrow \\kappa_T > 0$。'
+  },
+  {
+    id:'T36', num:36, cat:'熱力学基礎', level:'標準',
+    title:'クラペイロンの式と相平衡',
+    text:'相転移境界線の勾配を与えるクラペイロン（またはクラウジウス-クラペイロン）の式 $\\frac{dP}{dT} = \\frac{L}{T\\Delta v}$ を導け。水の融解曲線・蒸発曲線への応用を述べよ。',
+    hint:'2相の化学ポテンシャルが等しい条件から出発。$dG_1 = dG_2$ で偏微分を比べる。'
+  },
+  // ── 情報エントロピー ──
+  {
+    id:'T37', num:37, cat:'統計力学基礎', level:'応用',
+    title:'最大エントロピー原理',
+    text:'最大エントロピー原理（ジェインズ）を説明し、平均エネルギーを固定した制約のもとでエントロピーを最大化するとボルツマン分布が得られることを変分法で示せ。',
+    hint:'ラグランジュ乗数 $\\alpha$（規格化）と $\\beta$（エネルギー制約）を用いた変分 $\\delta(S - \\alpha \\sum p_i - \\beta \\sum p_i E_i) = 0$。'
+  },
+  // ── 実在気体・化学ポテンシャル ──
+  {
+    id:'T38', num:38, cat:'化学ポテンシャル', level:'標準',
+    title:'化学ポテンシャルの定義と相平衡',
+    text:'化学ポテンシャル $\\mu = \\left(\\frac{\\partial G}{\\partial N}\\right)_{T,P}$ を定義し、多成分系の相平衡条件（各相で化学ポテンシャルが等しい）を述べよ。理想混合気体の化学ポテンシャルを求めよ。',
+    hint:'$G = \\sum_i N_i \\mu_i$（オイラーの関係式）。相平衡：$\\mu_i^{(1)} = \\mu_i^{(2)}$。'
+  },
+  {
+    id:'T39', num:39, cat:'化学ポテンシャル', level:'応用',
+    title:'浸透圧とファント・ホッフの式',
+    text:'半透膜を通じた浸透圧の発生を化学ポテンシャルの観点から説明し、希薄溶液でのファント・ホッフの式 $\\Pi = nRT/V$ を導け。',
+    hint:'溶媒の化学ポテンシャルが両側で等しい条件 $\\mu_0(T,P) = \\mu_0(T, P+\\Pi) + k_BT\\ln(1-x)$ から展開する。'
+  },
+  // ── 非平衡統計力学 ──
+  {
+    id:'T40', num:40, cat:'非平衡統計', level:'応用',
+    title:'揺動散逸定理',
+    text:'揺動散逸定理の内容を述べよ。ブラウン運動の文脈でアインシュタインがどのように摩擦係数と拡散係数を結びつけたかを説明せよ。',
+    hint:'$D = k_BT/\\gamma$（$\\gamma$ は摩擦係数）。ミクロな揺動と巨視的散逸を結びつける定理。'
+  },
+  // ── 格子振動 ──
+  {
+    id:'T41', num:41, cat:'磁性・格子', level:'標準',
+    title:'フォノンの概念とアインシュタインモデル',
+    text:'格子振動の量子「フォノン」を定義し、アインシュタインモデル（全原子が同じ振動数）での比熱を計算せよ。低温での指数的減衰がデバイモデルの $T^3$ 則と異なることを述べよ。',
+    hint:'調和振動子の分配関数 $z = \\frac{e^{-\\beta \\hbar\\omega/2}}{1 - e^{-\\beta\\hbar\\omega}}$。エネルギーから $C_V = \\frac{\\partial \\langle E \\rangle}{\\partial T}$。'
+  },
+  {
+    id:'T42', num:42, cat:'磁性・格子', level:'標準',
+    title:'ブリルアン散乱と状態密度',
+    text:'フォノン分散関係 $\\omega(k)$ から状態密度 $g(\\omega)$ を計算する方法を説明せよ。1次元、3次元での具体的な形を示し、ファン・ホーヴ特異点に言及せよ。',
+    hint:'$g(\\omega) = \\sum_n \\int \\frac{d^3k}{(2\\pi)^3} \\delta(\\omega - \\omega_n(k))$。特異点は $\\nabla_k \\omega = 0$ で生じる。'
+  },
+  // ── 応用・総合 ──
+  {
+    id:'T43', num:43, cat:'総合', level:'応用',
+    title:'熱機関・冷凍機のCOP',
+    text:'冷凍機（ヒートポンプ）の成績係数（COP）を定義し、可逆冷凍機でのCOPが $T_2/(T_1 - T_2)$ となることを示せ。これが第2法則と整合することを確認せよ。',
+    hint:'$W = Q_1 - Q_2$（熱力学第1法則）、$Q_1/Q_2 = T_1/T_2$（可逆過程）から $COP = Q_2/W$。'
+  },
+  {
+    id:'T44', num:44, cat:'総合', level:'応用',
+    title:'熱力学と情報：マクスウェルのデーモン',
+    text:'マクスウェルのデーモンのパラドックスを説明し、ランダウアーの原理（情報消去と熱発生）によってどのように第2法則との矛盾が解消されるかを述べよ。',
+    hint:'1ビット情報消去に最低 $k_BT\\ln 2$ のエネルギー散逸が必要（ランダウアー限界）。デーモンが情報を消去する際に第2法則が担保される。'
+  },
+  {
+    id:'T45', num:45, cat:'非平衡統計', level:'応用',
+    title:'ジャルジンスキー等式とクラックスの関係',
+    text:'ジャルジンスキー等式 $\\langle e^{-W/k_BT} \\rangle = e^{-\\Delta F/k_BT}$ を述べよ。これが熱力学第2法則（$\\langle W \\rangle \\geq \\Delta F$）を含んでいることをイェンセンの不等式から示せ。',
+    hint:'$e^x$ は下凸なので $\\langle e^x \\rangle \\geq e^{\\langle x \\rangle}$（イェンセン）。これを $x = -W/k_BT$ に適用。'
+  },
+  {
+    id:'T46', num:46, cat:'量子統計', level:'応用',
+    title:'超流動とBEC：ランダウの臨界速度',
+    text:'液体ヘリウム4の超流動を「枯渇のない超流動」の観点から説明し、ランダウの臨界速度 $v_c = \\min_k(\\epsilon_k/\\hbar k)$ を導け。フォノン分散・ロトン分散との関係を述べよ。',
+    hint:'流れる液体中で励起を作るためのエネルギー保存・運動量保存から臨界速度が決まる。'
+  },
+  {
+    id:'T47', num:47, cat:'気体理論', level:'応用',
+    title:'ビリアル展開と第2ビリアル係数',
+    text:'実在気体の状態方程式のビリアル展開 $PV/NkT = 1 + B(T)/V + \\cdots$ を述べ、第2ビリアル係数 $B(T)$ が2体ポテンシャルの関数として表されることを示せ。ファン・デル・ワールス気体への応用を述べよ。',
+    hint:'$B(T) = -2\\pi \\int_0^\\infty (e^{-u(r)/k_BT} - 1) r^2 dr$（マイヤーのf関数の積分）。'
+  },
+  {
+    id:'T48', num:48, cat:'相転移', level:'応用',
+    title:'スケーリング則と普遍性',
+    text:'臨界指数 $\\alpha, \\beta, \\gamma, \\delta, \\eta, \\nu$ を定義し、スケーリング則（例：$\\alpha + 2\\beta + \\gamma = 2$ のラッシュブルックの不等式）を述べよ。普遍クラスとは何かを説明せよ。',
+    hint:'臨界点付近で $C_V \\sim |T-T_c|^{-\\alpha}$、$m \\sim |T-T_c|^\\beta$ 等。スケーリング仮説で指数間の関係が導かれる。'
+  },
+  {
+    id:'T49', num:49, cat:'総合', level:'応用',
+    title:'グランドポテンシャルと粒子数ゆらぎ',
+    text:'グランドカノニカルアンサンブルのグランドポテンシャル $\\Omega = -k_BT \\ln \\mathcal{Z}$ を定義し、平均粒子数と粒子数ゆらぎを $\\Omega$ で表せ。理想ボース気体とフェルミ気体での具体的な違いを述べよ。',
+    hint:'$\\langle N \\rangle = -\\frac{\\partial \\Omega}{\\partial \\mu}$、$\\langle (\\Delta N)^2 \\rangle = k_BT \\frac{\\partial \\langle N \\rangle}{\\partial \\mu}$。'
+  },
+  {
+    id:'T50', num:50, cat:'総合', level:'応用',
+    title:'統計力学から熱力学の再構築',
+    text:'統計力学の分配関数 $Z(T,V,N)$ から出発し、熱力学の基本関係式 $dU = TdS - PdV + \\mu dN$ を導け。各熱力学量（$T, P, \\mu$）が $Z$ の対数微分として表されることを示せ。',
+    hint:'$F = -k_BT\\ln Z$、$S = -\\frac{\\partial F}{\\partial T}$、$P = -\\frac{\\partial F}{\\partial V}$、$\\mu = \\frac{\\partial F}{\\partial N}$。'
+  },
+];
+
+const QUANTUM = [
+  // ── 波動関数・シュレーディンガー方程式 ──
+  {
+    id:'Q1', num:1, cat:'波動関数・基礎', level:'基礎',
+    title:'シュレーディンガー方程式の導出と意味',
+    text:'時間依存シュレーディンガー方程式 $i\\hbar \\frac{\\partial \\psi}{\\partial t} = \\hat{H}\\psi$ を述べ、定常状態のエネルギー固有値方程式（時間非依存シュレーディンガー方程式）を導け。波動関数の確率解釈を説明せよ。',
+    hint:'変数分離法 $\\psi(x,t) = \\phi(x)e^{-iEt/\\hbar}$ を用いて時間を分離する。$|\\psi|^2$ が確率密度。'
+  },
+  {
+    id:'Q2', num:2, cat:'波動関数・基礎', level:'基礎',
+    title:'不確定性原理',
+    text:'ハイゼンベルクの不確定性原理 $\\Delta x \\cdot \\Delta p \\geq \\hbar/2$ を述べ、コーシー-シュワルツ不等式または交換関係 $[\\hat{x}, \\hat{p}] = i\\hbar$ から導け。エネルギーと時間の不確定性関係についても述べよ。',
+    hint:'ロバートソン不等式 $\\Delta A \\Delta B \\geq \\frac{1}{2}|\\langle [\\hat{A},\\hat{B}] \\rangle|$ の特殊ケース。'
+  },
+  {
+    id:'Q3', num:3, cat:'波動関数・基礎', level:'基礎',
+    title:'波動関数の重ね合わせと測定の公準',
+    text:'量子力学の測定の公準（固有値・射影・波束の収縮）を説明せよ。2準位系（スピン1/2）を例にとり、測定前後で状態がどのように変化するかを述べよ。',
+    hint:'可観測量 $\\hat{A}$ の測定で値 $a_n$ が得られる確率は $|\\langle a_n|\\psi\\rangle|^2$。測定後は $|a_n\\rangle$ へ射影。'
+  },
+  {
+    id:'Q4', num:4, cat:'1次元問題', level:'基礎',
+    title:'無限深さ井戸型ポテンシャル',
+    text:'幅 $L$ の無限深さ井戸型ポテンシャルに閉じ込められた粒子のエネルギー固有値 $E_n = \\frac{n^2\\pi^2\\hbar^2}{2mL^2}$ と固有関数を求めよ。零点エネルギーの存在を説明せよ。',
+    hint:'境界条件 $\\psi(0) = \\psi(L) = 0$。$n = 1$ でも $E_1 > 0$（零点エネルギー）は不確定性原理から理解できる。'
+  },
+  {
+    id:'Q5', num:5, cat:'1次元問題', level:'基礎',
+    title:'調和振動子のエネルギー固有値',
+    text:'1次元量子調和振動子 $\\hat{H} = \\frac{\\hat{p}^2}{2m} + \\frac{1}{2}m\\omega^2\\hat{x}^2$ の昇降演算子 $\\hat{a}, \\hat{a}^\\dagger$ を定義し、エネルギー固有値 $E_n = (n+1/2)\\hbar\\omega$ を代数的に導け。',
+    hint:'$\\hat{a} = \\sqrt{\\frac{m\\omega}{2\\hbar}}\\left(\\hat{x} + \\frac{i\\hat{p}}{m\\omega}\\right)$。$\\hat{H} = \\hbar\\omega(\\hat{a}^\\dagger\\hat{a} + 1/2)$。'
+  },
+  {
+    id:'Q6', num:6, cat:'1次元問題', level:'標準',
+    title:'有限深さポテンシャル井戸と透過・反射',
+    text:'有限深さ井戸型ポテンシャル（$|x| < a$ で $V = -V_0$）の束縛状態の条件を導け。また、ポテンシャル障壁への粒子入射で、反射係数 $R$ と透過係数 $T$（$R + T = 1$）を求めよ。',
+    hint:'各領域の波動関数を書いて境界条件（$\\psi$ と $\\psi\'$ の連続性）で係数を決める。'
+  },
+  {
+    id:'Q7', num:7, cat:'1次元問題', level:'標準',
+    title:'トンネル効果と WKB 近似',
+    text:'量子トンネル効果を説明し、矩形ポテンシャル障壁での透過確率を計算せよ。WKB近似での透過確率 $T \\approx e^{-2\\int_a^b |p(x)|dx/\\hbar}$ を述べ、アルファ崩壊への応用を述べよ。',
+    hint:'$E < V_0$ の障壁内では $k \\to i\\kappa$（虚数波数）となり指数減衰する。'
+  },
+  // ── 3次元・中心力場 ──
+  {
+    id:'Q8', num:8, cat:'中心力場', level:'基礎',
+    title:'3次元球対称ポテンシャルと変数分離',
+    text:'3次元シュレーディンガー方程式を球座標で変数分離し、動径方程式と角度方程式に分離せよ。角度部分の解が球面調和関数 $Y_l^m(\\theta,\\phi)$ になることを述べよ。',
+    hint:'$\\psi = R(r) Y_l^m(\\theta,\\phi)$。角運動量演算子 $\\hat{L}^2 Y_l^m = \\hbar^2 l(l+1) Y_l^m$。'
+  },
+  {
+    id:'Q9', num:9, cat:'中心力場', level:'標準',
+    title:'水素原子のエネルギー固有値',
+    text:'水素原子のエネルギー固有値 $E_n = -\\frac{m_e e^4}{2\\hbar^2 n^2} = -\\frac{13.6\\text{ eV}}{n^2}$ を導け。主量子数 $n$, 方位量子数 $l$, 磁気量子数 $m$ の取りうる値と縮退度 $n^2$ を示せ。',
+    hint:'動径方程式の解にラゲール多項式が現れる。$n = 1, 2, 3, \\ldots$、$l = 0, 1, \\ldots, n-1$、$m = -l, \\ldots, l$。'
+  },
+  {
+    id:'Q10', num:10, cat:'中心力場', level:'標準',
+    title:'角運動量の量子化と昇降演算子',
+    text:'角運動量演算子 $\\hat{L}_x, \\hat{L}_y, \\hat{L}_z, \\hat{L}^2$ の交換関係を書き、$\\hat{L}_\\pm = \\hat{L}_x \\pm i\\hat{L}_y$ を使って固有値 $m \\hbar$ と $\\hbar^2 l(l+1)$ を代数的に導け。',
+    hint:'$[\\hat{L}_i, \\hat{L}_j] = i\\hbar \\epsilon_{ijk} \\hat{L}_k$。$\\hat{L}_+ |l,m\\rangle \\propto |l, m+1\\rangle$（$m = l$ で $\\hat{L}_+ |l,l\\rangle = 0$）。'
+  },
+  // ── スピン ──
+  {
+    id:'Q11', num:11, cat:'スピン', level:'基礎',
+    title:'スピン1/2の量子力学',
+    text:'スピン1/2の演算子をパウリ行列 $\\boldsymbol{\\sigma}$ で表し、$\\hat{S}_z$ の固有状態（アップ/ダウンスピノル）を示せ。任意の方向 $\\hat{n}$ についての期待値を計算せよ。',
+    hint:'$\\hat{S}_i = \\frac{\\hbar}{2}\\sigma_i$。$|\\uparrow\\rangle = \\begin{pmatrix}1\\\\0\\end{pmatrix}$, $|\\downarrow\\rangle = \\begin{pmatrix}0\\\\1\\end{pmatrix}$。'
+  },
+  {
+    id:'Q12', num:12, cat:'スピン', level:'標準',
+    title:'角運動量の合成とクレブシュ-ゴルダン係数',
+    text:'スピン $j_1$ とスピン $j_2$ の角運動量を合成し、全角運動量 $j = |j_1 - j_2|, \\ldots, j_1 + j_2$ が可能であることを示せ。スピン $1/2 \\otimes 1/2$ の場合を具体的に計算し、三重項・一重項状態を求めよ。',
+    hint:'$|j_1, j_2; j, m\\rangle = \\sum_{m_1, m_2} C^{j,m}_{j_1,m_1; j_2,m_2} |j_1, m_1\\rangle|j_2, m_2\\rangle$。対称・反対称の組み合わせ。'
+  },
+  // ── 近似法 ──
+  {
+    id:'Q13', num:13, cat:'近似法', level:'標準',
+    title:'1次の摂動論（非縮退）',
+    text:'非縮退な場合の定常状態摂動論を展開し、エネルギー固有値の1次補正 $E_n^{(1)} = \\langle n^{(0)}|H\'|n^{(0)}\\rangle$ と波動関数の1次補正を求めよ。',
+    hint:'$\\hat{H} = \\hat{H}_0 + \\lambda \\hat{H}\'$ と展開し、$\\lambda$ の各次数で方程式を整理する。'
+  },
+  {
+    id:'Q14', num:14, cat:'近似法', level:'標準',
+    title:'変分法と基底状態エネルギーの上限',
+    text:'変分原理（$\\langle \\psi | \\hat{H} | \\psi \\rangle / \\langle \\psi | \\psi \\rangle \\geq E_0$）を証明し、水素原子の基底状態エネルギーをガウス型試験関数で見積もれ。',
+    hint:'証明：$|\\psi\\rangle$ を固有状態で展開し、$E_0$ の係数が非負なことを使う。ガウス型 $\\psi \\propto e^{-\\alpha r^2}$ で $\\langle H \\rangle$ を $\\alpha$ の関数として最小化。'
+  },
+  {
+    id:'Q15', num:15, cat:'近似法', level:'応用',
+    title:'WKB近似と接続公式',
+    text:'WKB（半古典）近似の有効条件を述べ、古典的に許容される領域と禁止される領域での波動関数の形を示せ。転換点での接続公式を述べ、束縛状態の量子化条件（ボーア-ゾンマーフェルト量子化）を導け。',
+    hint:'$\\lambda_{dB} \\ll L$（ポテンシャルの変化のスケール）が有効条件。接続公式でリニア近似を使う。'
+  },
+  // ── 行列力学・ディラック記法 ──
+  {
+    id:'Q16', num:16, cat:'形式論', level:'基礎',
+    title:'ディラックのブラ-ケット記法',
+    text:'ブラ-ケット記法の基本概念（状態ベクトル $|\\psi\\rangle$, エルミート内積 $\\langle\\phi|\\psi\\rangle$, 完全性関係 $\\sum_n |n\\rangle\\langle n| = 1$）を説明し、行列要素 $\\langle m|\\hat{A}|n\\rangle$ をこの言語で記述せよ。',
+    hint:'基底の完全性 $\\sum_n |n\\rangle\\langle n| = \\hat{1}$ は任意の状態への表現の架け橋になる。'
+  },
+  {
+    id:'Q17', num:17, cat:'形式論', level:'標準',
+    title:'シュレーディンガー描像・ハイゼンベルク描像・相互作用描像',
+    text:'3つの描像（シュレーディンガー、ハイゼンベルク、相互作用/ディラック）の違いを、状態と演算子の時間発展の観点から比較せよ。ハイゼンベルク方程式 $\\frac{d\\hat{A}}{dt} = \\frac{i}{\\hbar}[\\hat{H}, \\hat{A}] + \\frac{\\partial \\hat{A}}{\\partial t}$ を導け。',
+    hint:'ユニタリ変換 $|\\psi_H\\rangle = e^{i\\hat{H}t/\\hbar}|\\psi_S(t)\\rangle$（ハイゼンベルク描像）で変換。'
+  },
+  {
+    id:'Q18', num:18, cat:'形式論', level:'標準',
+    title:'保存量と対称性：ネーターの定理の量子版',
+    text:'演算子 $\\hat{A}$ が保存量になる条件 $[\\hat{H}, \\hat{A}] = 0$ を述べ、空間並進対称性が運動量保存を導くことを具体的に示せ。エネルギー準位の縮退と対称性の関係を述べよ。',
+    hint:'並進演算子 $\\hat{T}(a) = e^{-i\\hat{p}a/\\hbar}$。$[\\hat{H}, \\hat{T}(a)] = 0 \\Rightarrow$ 運動量保存。縮退は同じ固有値をもつ独立な固有状態の存在。'
+  },
+  // ── 時間依存摂動 ──
+  {
+    id:'Q19', num:19, cat:'近似法', level:'標準',
+    title:'時間依存摂動論とフェルミの黄金律',
+    text:'時間依存摂動論の第1近似を展開し、遷移確率を求めよ。状態密度が連続的な場合、長時間での遷移確率がフェルミの黄金律 $W_{i\\to f} = \\frac{2\\pi}{\\hbar}|\\langle f|\\hat{H}\'|i\\rangle|^2 \\rho(E_f)$ となることを示せ。',
+    hint:'$c_f(t) = -\\frac{i}{\\hbar}\\int_0^t \\langle f|H\'(t\')|i\\rangle e^{i(E_f-E_i)t\'/\\hbar}dt\'$。$|c_f|^2$ の長時間極限で $\\delta$ 関数を使う。'
+  },
+  {
+    id:'Q20', num:20, cat:'近似法', level:'応用',
+    title:'断熱近似と幾何学的位相（ベリー位相）',
+    text:'量子力学的断熱定理を述べよ。ハミルトニアンがゆっくり変化するとき、系が固有状態に留まることを説明し、ベリー位相（幾何学的位相）の概念を述べよ。',
+    hint:'断熱条件：$|\\langle m|\\dot{H}|n\\rangle| \\ll |E_n - E_m|/\\hbar$。ベリー位相は閉じたループでのパラメータ空間の積分。'
+  },
+  // ── 多体問題・同一粒子 ──
+  {
+    id:'Q21', num:21, cat:'多体・同一粒子', level:'標準',
+    title:'同一粒子の区別不可能性とパウリの排他原理',
+    text:'量子力学における同一粒子の不可弁別性を説明し、ボソンとフェルミオンの多体波動関数がそれぞれ交換で対称・反対称になることを述べよ。パウリの排他原理を導け。',
+    hint:'交換演算子 $\\hat{P}_{12}$ の固有値は $\\pm 1$（整数スピン：$+1$, 半整数スピン：$-1$）。反対称で同じ状態に2粒子を入れると0になる。'
+  },
+  {
+    id:'Q22', num:22, cat:'多体・同一粒子', level:'標準',
+    title:'スレーター行列式とハートリー-フォック法',
+    text:'スレーター行列式を定義し、$N$ 電子系の波動関数がこの形で書けることを示せ。ハートリー-フォック近似の概念（平均場近似と交換相関の取り扱い）を説明せよ。',
+    hint:'スレーター行列式は反対称化された積型波動関数。HF方程式は変分原理から導かれる自己無撞着方程式。'
+  },
+  {
+    id:'Q23', num:23, cat:'多体・同一粒子', level:'応用',
+    title:'第二量子化の形式',
+    text:'ボソンおよびフェルミオンの生成・消滅演算子 $\\hat{a}^\\dagger, \\hat{a}$（または $\\hat{c}^\\dagger, \\hat{c}$）を導入し、それらの交換（反交換）関係を書け。ハミルトニアンを第二量子化形式で書く利点を述べよ。',
+    hint:'ボソン：$[\\hat{a}_k, \\hat{a}_{k\'}^\\dagger] = \\delta_{kk\'}$。フェルミオン：$\\{\\hat{c}_k, \\hat{c}_{k\'}^\\dagger\\} = \\delta_{kk\'}$。'
+  },
+  // ── 経路積分 ──
+  {
+    id:'Q24', num:24, cat:'経路積分', level:'応用',
+    title:'ファインマンの経路積分',
+    text:'ファインマンの経路積分表示 $\\langle x_f, t_f | x_i, t_i \\rangle = \\int \\mathcal{D}[x(t)] e^{iS[x]/\\hbar}$ を説明し、自由粒子伝播関数を経路積分で求めよ。古典極限（$\\hbar \\to 0$）での停留位相近似と最小作用原理との対応を述べよ。',
+    hint:'全経路の和でそれぞれに位相 $e^{iS/\\hbar}$ を持つ。$\\hbar \\to 0$ では経典的経路以外は干渉により相殺する。'
+  },
+  // ── 縮退摂動論 ──
+  {
+    id:'Q25', num:25, cat:'近似法', level:'標準',
+    title:'縮退のある場合の摂動論',
+    text:'エネルギーが縮退している場合の定常状態摂動論を展開し、縮退を解く適切な基底を選ぶ方法を述べよ。水素原子の線形シュタルク効果（$n=2$ 状態）を例に適用せよ。',
+    hint:'縮退した部分空間内で $H\'$ を行列表示し、その固有値問題を解く。$n=2$ では $s$-$p$ 混合による線形スタルク効果が現れる。'
+  },
+  // ── 相対論的量子力学 ──
+  {
+    id:'Q26', num:26, cat:'相対論的量子力学', level:'応用',
+    title:'クライン-ゴルドン方程式とディラック方程式',
+    text:'相対論的量子力学の出発点として、クライン-ゴルドン方程式を導け。負のエネルギー問題を解決するためにディラックが導入したディラック方程式の動機と概念を説明せよ。',
+    hint:'$E^2 = (pc)^2 + (mc^2)^2$ を量子化：$-\\hbar^2 \\frac{\\partial^2 \\psi}{\\partial t^2} = (-\\hbar^2 c^2 \\nabla^2 + m^2 c^4)\\psi$。ディラックは $E$ に1次の方程式を求めた。'
+  },
+  {
+    id:'Q27', num:27, cat:'相対論的量子力学', level:'応用',
+    title:'スピン軌道相互作用と微細構造',
+    text:'水素原子の微細構造（スピン-軌道相互作用）を摂動として扱い、エネルギー補正を求めよ。$j = l \\pm 1/2$ の2つの状態でエネルギーが異なることを示せ。',
+    hint:'$H_{SO} = \\frac{1}{2m^2c^2} \\frac{1}{r}\\frac{dV}{dr} \\hat{L}\\cdot\\hat{S}$。$\\hat{L}\\cdot\\hat{S} = \\frac{1}{2}(\\hat{J}^2 - \\hat{L}^2 - \\hat{S}^2)$。'
+  },
+  // ── 散乱理論 ──
+  {
+    id:'Q28', num:28, cat:'散乱理論', level:'標準',
+    title:'散乱断面積と散乱振幅',
+    text:'散乱問題の形式論を述べ、微分散乱断面積 $d\\sigma/d\\Omega = |f(\\theta)|^2$ と散乱振幅 $f(\\theta)$ の関係を定義せよ。ボルン近似を導き、クーロン散乱（ラザフォード散乱）への適用を述べよ。',
+    hint:'入射波 $e^{ikz}$ ＋ 散乱球面波 $f(\\theta)e^{ikr}/r$。ボルン近似：$f(\\theta) = -\\frac{m}{2\\pi\\hbar^2}\\int V(r\')e^{i(k-k\')\\cdot r\'}d^3r\'$。'
+  },
+  {
+    id:'Q29', num:29, cat:'散乱理論', level:'応用',
+    title:'分波法と光学定理',
+    text:'球対称ポテンシャルへの散乱を分波法で展開し、散乱行列 $S_l = e^{2i\\delta_l}$ と位相シフト $\\delta_l$ で全散乱断面積を表せ。光学定理 $\\sigma_{tot} = \\frac{4\\pi}{k}\\text{Im}[f(0)]$ を述べよ。',
+    hint:'$\\sigma_{tot} = \\frac{4\\pi}{k^2}\\sum_l (2l+1)\\sin^2\\delta_l$。低エネルギーでは $s$ 波 ($l=0$) が支配的。'
+  },
+  // ── 量子情報・量子もつれ ──
+  {
+    id:'Q30', num:30, cat:'量子情報', level:'標準',
+    title:'量子もつれとベル不等式',
+    text:'EPR状態（ベル状態）を書き、「量子もつれ」の概念を説明せよ。ベル不等式とその量子力学的な破れを述べ、隠れた変数理論との関係を説明せよ。',
+    hint:'$|\\Phi^+\\rangle = \\frac{1}{\\sqrt{2}}(|00\\rangle + |11\\rangle)$。CHSH不等式：古典：$|S| \\leq 2$、量子：$|S| \\leq 2\\sqrt{2}$。'
+  },
+  {
+    id:'Q31', num:31, cat:'量子情報', level:'応用',
+    title:'密度行列と混合状態',
+    text:'密度行列 $\\hat{\\rho} = \\sum_i p_i |\\psi_i\\rangle\\langle\\psi_i|$ を定義し、純粋状態と混合状態の違い（$\\text{Tr}(\\hat{\\rho}^2) = 1$ vs $< 1$）を述べよ。部分トレースとエンタングルメントエントロピーを説明せよ。',
+    hint:'$\\hat{\\rho}^2 = \\hat{\\rho}$（純粋状態）。エンタングルメントエントロピー $S = -\\text{Tr}(\\hat{\\rho}_A \\ln \\hat{\\rho}_A)$。'
+  },
+  // ── 磁場・電磁場中の量子力学 ──
+  {
+    id:'Q32', num:32, cat:'電磁場中の量子力学', level:'標準',
+    title:'ゼーマン効果',
+    text:'外部磁場 $\\mathbf{B}$ 中の水素原子のエネルギー補正（ゼーマン効果）を計算せよ。正常ゼーマン効果と異常ゼーマン効果の違いを、スピンの有無と $g$ 因子で説明せよ。',
+    hint:'$H_Z = -\\boldsymbol{\\mu}\\cdot\\mathbf{B} = \\frac{e}{2m}(\\hat{L} + 2\\hat{S})\\cdot\\mathbf{B}$。弱磁場では $j, m_j$ が良い量子数（異常ゼーマン）。'
+  },
+  {
+    id:'Q33', num:33, cat:'電磁場中の量子力学', level:'応用',
+    title:'ランダウ準位と量子ホール効果',
+    text:'一様磁場中の2次元電子のハミルトニアンを解き、エネルギーがランダウ準位 $E_N = (N + 1/2)\\hbar\\omega_c$ に量子化されることを示せ。量子ホール効果との関係を述べよ。',
+    hint:'$\\hat{H} = \\frac{1}{2m}(\\hat{p} - e\\mathbf{A})^2$。Landauゲージ $A = (0, Bx, 0)$ で $y$ 方向に平面波として分離できる。'
+  },
+  {
+    id:'Q34', num:34, cat:'電磁場中の量子力学', level:'応用',
+    title:'アハラノフ-ボーム効果',
+    text:'アハラノフ-ボーム効果を説明し、電磁ポテンシャル $\\mathbf{A}$ が（磁場が0の領域でも）観測可能な干渉縞を引き起こすことを示せ。これが量子力学の非局所性の例であることを述べよ。',
+    hint:'閉ループを回る波動関数の位相変化 $\\Delta\\phi = \\frac{e}{\\hbar}\\oint \\mathbf{A}\\cdot d\\mathbf{l} = \\frac{e\\Phi}{\\hbar}$（$\\Phi$ は磁束）。'
+  },
+  // ── 対称性と群論 ──
+  {
+    id:'Q35', num:35, cat:'対称性', level:'標準',
+    title:'宇称（パリティ）と時間反転対称性',
+    text:'宇称演算子 $\\hat{P}$ と時間反転演算子 $\\hat{T}$ を定義し、それらが量子力学的状態に及ぼす作用を説明せよ。弱い相互作用でのパリティの破れを述べよ。',
+    hint:'$\\hat{P}|x\\rangle = |-x\\rangle$。$\\hat{T}$ は反ユニタリ演算子（複素共役を含む）。'
+  },
+  {
+    id:'Q36', num:36, cat:'対称性', level:'応用',
+    title:'群論と量子力学：既約表現と選択則',
+    text:'量子力学での群論の役割を説明し、電気双極子遷移における選択則 $\\Delta l = \\pm 1$, $\\Delta m = 0, \\pm 1$ を対称性の観点から導け。',
+    hint:'遷移行列要素 $\\langle n\', l\', m\' | \\hat{r} | n, l, m \\rangle$ が非零になる条件は角運動量の保存と積表現の分解から導かれる。'
+  },
+  // ── 多電子原子 ──
+  {
+    id:'Q37', num:37, cat:'多体・同一粒子', level:'標準',
+    title:'ヘリウム原子と交換相互作用',
+    text:'ヘリウム原子（2電子系）でパラヘリウム（一重項）とオルソヘリウム（三重項）の状態を区別し、スピン状態の対称性と空間波動関数の反対称性の組み合わせを説明せよ。交換積分がエネルギー差をもたらすことを述べよ。',
+    hint:'フェルミオン全体の波動関数は反対称。空間部分が対称（一重項）か反対称（三重項）かでスピン部分が逆になる。'
+  },
+  // ── 固体の量子力学 ──
+  {
+    id:'Q38', num:38, cat:'固体物理', level:'標準',
+    title:'ブロッホの定理とエネルギーバンド',
+    text:'周期ポテンシャル中のブロッホの定理 $\\psi_{nk}(r) = e^{ik\\cdot r} u_{nk}(r)$ を述べ、結晶運動量 $\\hbar k$ の意味を説明せよ。禁制帯（バンドギャップ）の発生をほぼ自由電子モデルで説明せよ。',
+    hint:'$u_{nk}(r)$ は格子の周期と同じ周期を持つ。ブリルアンゾーン境界でデジェネレシーが生じてバンドギャップが開く。'
+  },
+  {
+    id:'Q39', num:39, cat:'固体物理', level:'応用',
+    title:'トポロジカル絶縁体とベリー位相',
+    text:'バンド理論でのベリー曲率とチャーン数を説明し、トポロジカル絶縁体がバルクに絶縁体的性質を持ちながら表面/端に伝導状態を持つ理由をバルク-境界対応で述べよ。',
+    hint:'チャーン数 $C = \\frac{1}{2\\pi}\\int_{BZ} \\Omega_n(k) d^2k$（整数）がトポロジカル不変量。$C \\neq 0$ でカイラルエッジ状態が存在。'
+  },
+  // ── 量子光学・腔量子電気力学 ──
+  {
+    id:'Q40', num:40, cat:'量子光学', level:'標準',
+    title:'ジャヤネス-カミングスモデル',
+    text:'2準位原子と単モード電磁場の相互作用（ジャヤネス-カミングスモデル）を書き、ラビ振動（誘導放出・吸収の振動）を導け。真空ラビ分裂を述べよ。',
+    hint:'$H_{JC} = \\hbar\\omega \\hat{a}^\\dagger \\hat{a} + \\frac{\\hbar\\omega_0}{2}\\sigma_z + \\hbar g(\\hat{a}\\sigma_+ + \\hat{a}^\\dagger\\sigma_-)$（回転波近似）。'
+  },
+  // ── 量子コンピュータ基礎 ──
+  {
+    id:'Q41', num:41, cat:'量子情報', level:'応用',
+    title:'量子ビットと量子ゲート',
+    text:'量子ビット（qubit）とブロッホ球表示を説明せよ。パウリゲート・アダマールゲート・CNOTゲートの行列表示と動作を示し、これらで万能量子計算が構成できることを述べよ。',
+    hint:'$H|0\\rangle = |+\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle)$（アダマール）。CNOTはもつれ状態を生成・解除する。'
+  },
+  {
+    id:'Q42', num:42, cat:'量子情報', level:'応用',
+    title:'ショアのアルゴリズムと量子優位性',
+    text:'ショアの素因数分解アルゴリズムの概要（量子フーリエ変換と位数発見）を説明し、古典計算の指数時間に対して多項式時間で解ける理由を述べよ。',
+    hint:'量子フーリエ変換（QFT）は位数 $r$ の発見を指数的に速める。$a^r \\equiv 1 \\pmod{N}$ を求め RSA 暗号を破れる。'
+  },
+  // ── 場の量子論への入口 ──
+  {
+    id:'Q43', num:43, cat:'場の理論入門', level:'応用',
+    title:'調和振動子の場の量子化',
+    text:'1次元格子の調和振動子系を量子化し、フォノンの概念を導入せよ。これがスカラー場の自由場量子化の最も単純な例であることを述べよ。',
+    hint:'$H = \\sum_k \\hbar\\omega_k(a_k^\\dagger a_k + 1/2)$。連続極限で場の理論に移行する。'
+  },
+  {
+    id:'Q44', num:44, cat:'場の理論入門', level:'応用',
+    title:'自発的対称性の破れと南部-ゴールドストーンの定理',
+    text:'連続対称性が自発的に破れるとき、ゴールドストーンボソン（質量ゼロの粒子）が現れることを述べよ。メキシカンハット型ポテンシャルを使って直感的に説明せよ。',
+    hint:'基底状態が対称性を破っている場合、破れた各連続対称性ジェネレーターに対して1つのゴールドストーン粒子が現れる。'
+  },
+  // ── 経路積分・伝播関数 ──
+  {
+    id:'Q45', num:45, cat:'経路積分', level:'応用',
+    title:'虚時間経路積分と統計力学',
+    text:'虚時間 $\\tau = it$ の経路積分表示と統計力学（分配関数）の対応を述べよ。$Z = \\text{Tr}(e^{-\\beta H})$ が周期的境界条件（$\\beta = 1/k_BT$）での量子力学的経路積分に対応することを説明せよ。',
+    hint:'$\\beta \\to \\tau = \\beta\\hbar$ への対応。低温では基底状態が支配的（$Z \\to e^{-\\beta E_0}$）。'
+  },
+  // ── 水素分子・化学結合 ──
+  {
+    id:'Q46', num:46, cat:'多体・同一粒子', level:'標準',
+    title:'水素分子イオンと分子軌道法',
+    text:'$\\mathrm{H_2^+}$ の電子構造を変分法（LCAO近似）で扱い、結合性軌道と反結合性軌道のエネルギーを求めよ。なぜ結合性軌道が安定かを説明せよ。',
+    hint:'$\\psi_{\\pm} = \\frac{1}{\\sqrt{2(1\\pm S)}}(\\psi_A \\pm \\psi_B)$（$S$ は重なり積分）。結合性はエネルギーが孤立原子より低い。'
+  },
+  // ── 核物理との接点 ──
+  {
+    id:'Q47', num:47, cat:'応用', level:'応用',
+    title:'α崩壊のトンネル効果とガモフ因子',
+    text:'α粒子が核のクーロン障壁をトンネルするガモフ理論を説明し、崩壊定数 $\\lambda \\propto e^{-2G}$（$G$ はガモフ因子）を WKB 近似から導け。半減期と崩壊エネルギーの関係（ガイガー-ナッタルの法則）を述べよ。',
+    hint:'$G = \\int_{r_1}^{r_2}\\sqrt{\\frac{2m(V(r)-E)}{\\hbar^2}}dr$。クーロンポテンシャル $V(r) = \\frac{Z_1 Z_2 e^2}{r}$ の積分。'
+  },
+  // ── 量子測定 ──
+  {
+    id:'Q48', num:48, cat:'形式論', level:'応用',
+    title:'量子ゾーノ効果と量子測定の逆効果',
+    text:'量子ゾーノ効果（頻繁な測定が遷移を抑制する現象）を説明し、遷移確率が測定間隔 $\\tau$ の短い極限で $\\propto \\tau^2$ になることを時間依存摂動論から示せ。',
+    hint:'$|c_f(\\tau)|^2 \\propto \\tau^2$（短時間展開）。測定を繰り返すと合計時間を一定にしたときの遷移確率が $\\propto \\tau \\to 0$ で消える。'
+  },
+  // ── 超伝導の量子力学 ──
+  {
+    id:'Q49', num:49, cat:'応用', level:'応用',
+    title:'クーパー対とBCS理論の概要',
+    text:'フォノンを介した電子-電子有効引力がクーパー対を形成するメカニズムを説明し、BCS超伝導のエネルギーギャップ $\\Delta$ の存在を定性的に述べよ。ロンドン方程式と超流動との対比を述べよ。',
+    hint:'フェルミ面近傍の電子ペア（反対のスピン・運動量）が引力で束縛。凝縮したクーパー対が超流動的に流れる。'
+  },
+  {
+    id:'Q50', num:50, cat:'応用', level:'応用',
+    title:'量子力学の解釈問題',
+    text:'量子力学の測定問題（シュレーディンガーの猫）を説明し、コペンハーゲン解釈・エヴェレットの多世界解釈・デコヒーレンスによるアプローチのそれぞれの考え方を比較せよ。',
+    hint:'観測者と系の区別（コペンハーゲン）、波束収縮は実際に起こる vs 分岐（多世界）、環境との相互作用で重ね合わせが失われる（デコヒーレンス）。'
+  },
+];
+
+// ── IndexedDB: Answer storage ──
+let db = null;
+const answerCache = {}; // {problemId: {fileName, fileType}}
+
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('physicsExamAnswers', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('answers', {keyPath: 'id'});
+    req.onsuccess = e => { db = e.target.result; resolve(); };
+    req.onerror = e => reject(e);
+  });
+}
+
+function loadAllAnswerMeta() {
+  return new Promise(resolve => {
+    const req = db.transaction('answers', 'readonly').objectStore('answers').getAll();
+    req.onsuccess = e => {
+      e.target.result.forEach(item => { answerCache[item.id] = {fileName: item.fileName, fileType: item.fileType}; });
+      resolve();
+    };
+    req.onerror = () => resolve();
+  });
+}
+
+function saveAnswer(id, file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const tx = db.transaction('answers', 'readwrite');
+      tx.objectStore('answers').put({id, fileName: file.name, fileType: file.type, data: e.target.result});
+      tx.oncomplete = () => { answerCache[id] = {fileName: file.name, fileType: file.type}; resolve(); };
+      tx.onerror = reject;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadAnswerData(id) {
+  return new Promise(resolve => {
+    const req = db.transaction('answers', 'readonly').objectStore('answers').get(id);
+    req.onsuccess = e => resolve(e.target.result || null);
+    req.onerror = () => resolve(null);
+  });
+}
+
+function removeAnswer(id) {
+  return new Promise(resolve => {
+    const tx = db.transaction('answers', 'readwrite');
+    tx.objectStore('answers').delete(id);
+    tx.oncomplete = () => { delete answerCache[id]; resolve(); };
+    tx.onerror = () => resolve();
+  });
+}
+
+function renderAnswerSection(id) {
+  const el = document.getElementById('answer-' + id);
+  if (!el) return;
+  const meta = answerCache[id];
+  if (!meta) {
+    el.innerHTML = `
+      <div class="answer-section-outer">
+        <div class="answer-section-label">回答</div>
+        <label class="upload-area" for="upload-${id}">
+          <span>📎</span> アップロード（PDF / 画像）
+          <input type="file" id="upload-${id}" accept=".pdf,image/*" style="display:none" onchange="handleUpload('${id}', this)">
+        </label>
+      </div>`;
+  } else {
+    const isImg = meta.fileType.startsWith('image/');
+    el.innerHTML = `
+      <div class="answer-section-outer">
+        <div class="answer-section-label">回答</div>
+        <div class="answer-file-row" id="answer-file-row-${id}">
+          <span class="answer-file-icon">${isImg ? '🖼' : '📄'}</span>
+          <span class="answer-filename" title="${meta.fileName}">${meta.fileName}</span>
+          <button class="answer-btn answer-view-btn" onclick="viewAnswer('${id}')">表示</button>
+          <button class="answer-btn answer-del-btn" onclick="deleteAnswerUI('${id}')">削除</button>
+        </div>
+        ${isImg ? `<img class="answer-thumb" id="thumb-${id}" src="" alt="プレビュー" onclick="viewAnswer('${id}')">` : ''}
+      </div>`;
+    if (isImg) {
+      loadAnswerData(id).then(item => {
+        const thumb = document.getElementById('thumb-' + id);
+        if (thumb && item) thumb.src = item.data;
+      });
+    }
+  }
+  // Update header badge
+  const badge = document.getElementById('answer-badge-' + id);
+  if (badge) { badge.style.display = meta ? '' : 'none'; }
+}
+
+async function handleUpload(id, input) {
+  const file = input.files[0];
+  if (!file) return;
+  await saveAnswer(id, file);
+  renderAnswerSection(id);
+  const badge = document.getElementById('answer-badge-' + id);
+  if (badge) badge.style.display = '';
+}
+
+let _pdfBlobUrl = null;
+
+async function viewAnswer(id) {
+  const item = await loadAnswerData(id);
+  if (!item) return;
+  if (item.fileType.startsWith('image/')) {
+    document.getElementById('lightbox-img').src = item.data;
+    document.getElementById('lightbox').classList.add('open');
+  } else {
+    // PDFはページ内モーダルで表示（window.open不要）
+    if (_pdfBlobUrl) URL.revokeObjectURL(_pdfBlobUrl);
+    const res = await fetch(item.data);
+    const blob = await res.blob();
+    _pdfBlobUrl = URL.createObjectURL(blob);
+    document.getElementById('pdf-modal-frame').src = _pdfBlobUrl;
+    document.getElementById('pdf-modal-title').textContent = item.fileName;
+    const dlLink = document.getElementById('pdf-dl-link');
+    dlLink.href = _pdfBlobUrl;
+    dlLink.download = item.fileName;
+    document.getElementById('pdf-modal').classList.add('open');
+  }
+}
+
+async function deleteAnswerUI(id) {
+  if (!confirm('回答ファイルを削除しますか？')) return;
+  await removeAnswer(id);
+  renderAnswerSection(id);
+  const badge = document.getElementById('answer-badge-' + id);
+  if (badge) badge.style.display = 'none';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
+}
+
+function closePdfModal() {
+  document.getElementById('pdf-modal').classList.remove('open');
+  document.getElementById('pdf-modal-frame').src = '';
+  if (_pdfBlobUrl) { URL.revokeObjectURL(_pdfBlobUrl); _pdfBlobUrl = null; }
+}
+
+// ── Export / Import ──
+function showSyncStatus(msg, type, durationMs = 4000) {
+  const el = document.getElementById('sync-status');
+  el.textContent = msg;
+  el.className = 'sync-status ' + type;
+  if (durationMs > 0) setTimeout(() => { el.className = 'sync-status'; }, durationMs);
+}
+
+async function exportData() {
+  const btn = document.getElementById('btn-export');
+  btn.disabled = true;
+  showSyncStatus('エクスポート中…', 'loading', 0);
+  try {
+    // IndexedDB から全回答を取得
+    const answers = await new Promise((resolve, reject) => {
+      const req = db.transaction('answers', 'readonly').objectStore('answers').getAll();
+      req.onsuccess = e => resolve(e.target.result);
+      req.onerror = reject;
+    });
+
+    const payload = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      checkedIDs: JSON.parse(localStorage.getItem('checkedIDs') || '{}'),
+      answers: answers  // [{id, fileName, fileType, data(base64)}]
+    };
+
+    const json = JSON.stringify(payload);
+    const blob = new Blob([json], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const date = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `physics_exam_backup_${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    const sizeMB = (blob.size / 1024 / 1024).toFixed(1);
+    showSyncStatus(`✓ 保存完了（${answers.length}件の回答, ${sizeMB} MB）`, 'ok');
+  } catch (e) {
+    showSyncStatus('エクスポートに失敗しました', 'err');
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  input.value = ''; // 同じファイルを再度選べるようリセット
+
+  if (!confirm('インポートすると現在の進捗と回答ファイルが上書きされます。続けますか？')) return;
+
+  showSyncStatus('インポート中…', 'loading', 0);
+  try {
+    const text = await file.text();
+    const payload = JSON.parse(text);
+
+    if (!payload.version || !payload.checkedIDs) {
+      throw new Error('ファイル形式が正しくありません');
+    }
+
+    // チェック状態を復元
+    localStorage.setItem('checkedIDs', JSON.stringify(payload.checkedIDs));
+    checkedIDs = payload.checkedIDs;
+
+    // 回答ファイルを IndexedDB に復元
+    const answerList = payload.answers || [];
+    if (answerList.length > 0) {
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction('answers', 'readwrite');
+        const store = tx.objectStore('answers');
+        // 既存データをクリアしてから書き込む
+        store.clear();
+        answerList.forEach(item => store.put(item));
+        tx.oncomplete = resolve;
+        tx.onerror = reject;
+      });
+      // キャッシュを再構築
+      Object.keys(answerCache).forEach(k => delete answerCache[k]);
+      answerList.forEach(item => {
+        answerCache[item.id] = {fileName: item.fileName, fileType: item.fileType};
+      });
+    }
+
+    openCards = {};
+    renderAll();
+    const date = payload.exportedAt ? payload.exportedAt.slice(0, 10) : '不明';
+    showSyncStatus(`✓ 復元完了（${date} 保存分, ${answerList.length}件の回答）`, 'ok');
+  } catch (e) {
+    showSyncStatus('インポートに失敗: ' + e.message, 'err');
+    console.error(e);
+  }
+}
+
+// ── State ──
+let currentTab = 'thermo';
+let checkedIDs = JSON.parse(localStorage.getItem('checkedIDs') || '{}');
+let openCards = {};
+
+function problems() { return currentTab === 'thermo' ? THERMO : QUANTUM; }
+function tabKey() { return 'checked_' + currentTab; }
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', (i===0) === (tab==='thermo')));
+  buildCatFilter();
+  document.getElementById('filter-level').value = '';
+  document.getElementById('filter-cat').value = '';
+  document.getElementById('search-input').value = '';
+  openCards = {};
+  renderAll();
+}
+
+function buildCatFilter() {
+  const sel = document.getElementById('filter-cat');
+  const cats = [...new Set(problems().map(p => p.cat))];
+  sel.innerHTML = '<option value="">すべて</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+function getChecked() { return checkedIDs[currentTab] || {}; }
+function setChecked(id, val) {
+  if (!checkedIDs[currentTab]) checkedIDs[currentTab] = {};
+  if (val) checkedIDs[currentTab][id] = true;
+  else delete checkedIDs[currentTab][id];
+  localStorage.setItem('checkedIDs', JSON.stringify(checkedIDs));
+}
+
+function applyFilters() { renderAll(); }
+
+function renderAll() {
+  const lv = document.getElementById('filter-level').value;
+  const cat = document.getElementById('filter-cat').value;
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const checked = getChecked();
+
+  let list = problems().filter(p => {
+    if (lv && p.level !== lv) return false;
+    if (cat && p.cat !== cat) return false;
+    if (q && !(p.title.toLowerCase().includes(q) || p.text.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  const total = problems().length;
+  const doneCount = Object.keys(getChecked()).length;
+  const pct = Math.round(doneCount / total * 100);
+  document.getElementById('progress-label').textContent = `進捗: ${doneCount} / ${total} (${pct}%)`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  // Stats
+  const byLevel = {基礎:0, 標準:0, 応用:0};
+  problems().forEach(p => { if (checked[p.id]) byLevel[p.level]++; });
+  document.getElementById('stats').innerHTML =
+    `<span class="stat-chip" style="background:var(--easy-bg);color:var(--easy)">基礎 ${byLevel['基礎']}/${problems().filter(p=>p.level==='基礎').length}</span>` +
+    `<span class="stat-chip" style="background:var(--normal-bg);color:var(--normal)">標準 ${byLevel['標準']}/${problems().filter(p=>p.level==='標準').length}</span>` +
+    `<span class="stat-chip" style="background:var(--hard-bg);color:var(--hard)">応用 ${byLevel['応用']}/${problems().filter(p=>p.level==='応用').length}</span>` +
+    `<span class="stat-chip">表示中 ${list.length}問</span>`;
+
+  const container = document.getElementById('problem-list');
+  if (list.length === 0) {
+    container.innerHTML = '<div class="no-results">条件に合う問題がありません</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(p => {
+    const isChecked = !!checked[p.id];
+    const isOpen = !!openCards[p.id];
+    const badgeClass = p.level === '基礎' ? 'badge-easy' : p.level === '標準' ? 'badge-normal' : 'badge-hard';
+    return `
+    <div class="problem-card ${isChecked ? 'checked' : ''}" id="card-${p.id}">
+      <div class="problem-header" onclick="toggleCard('${p.id}')">
+        <div class="problem-num">${p.num}</div>
+        <div class="problem-meta">
+          <span class="badge badge-cat">${p.cat}</span>
+          <span class="badge ${badgeClass}">${p.level}</span>
+        </div>
+        <div class="problem-title">${p.title}</div>
+        <span class="answer-badge" id="answer-badge-${p.id}" style="display:${answerCache[p.id] ? '' : 'none'}">回答済</span>
+        <button class="check-btn" onclick="event.stopPropagation(); toggleCheck('${p.id}')" title="完了マーク">${isChecked ? '✓' : ''}</button>
+        <span class="expand-icon">${isOpen ? '▲' : '▼'}</span>
+      </div>
+      <div class="problem-body ${isOpen ? 'open' : ''}" id="body-${p.id}">
+        <div class="problem-text">${p.text}</div>
+        <div class="hint-section">
+          <button class="hint-toggle" onclick="toggleHint('${p.id}')">ヒントを見る</button>
+          <div class="hint-body" id="hint-${p.id}"><strong>ヒント：</strong>${p.hint}</div>
+        </div>
+        <div id="answer-${p.id}"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(e => console.warn(e));
+  }
+  // Populate answer sections for open cards
+  list.forEach(p => { if (openCards[p.id]) renderAnswerSection(p.id); });
+}
+
+function toggleCard(id) {
+  openCards[id] = !openCards[id];
+  const body = document.getElementById('body-' + id);
+  const card = document.getElementById('card-' + id);
+  if (body) {
+    body.classList.toggle('open', openCards[id]);
+    const icon = card.querySelector('.expand-icon');
+    if (icon) icon.textContent = openCards[id] ? '▲' : '▼';
+    if (openCards[id]) {
+      renderAnswerSection(id);
+      if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+        MathJax.typesetPromise([body]).catch(e => console.warn(e));
+      }
+    }
+  }
+}
+
+function toggleCheck(id) {
+  const current = !!getChecked()[id];
+  setChecked(id, !current);
+  renderAll();
+}
+
+function toggleHint(id) {
+  const hint = document.getElementById('hint-' + id);
+  if (hint) {
+    hint.classList.toggle('open');
+    const btn = hint.previousElementSibling;
+    if (btn) btn.textContent = hint.classList.contains('open') ? 'ヒントを隠す' : 'ヒントを見る';
+    if (hint.classList.contains('open') && typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+      MathJax.typesetPromise([hint]).catch(e => console.warn(e));
+    }
+  }
+}
+
+function resetProgress() {
+  if (confirm('このタブの進捗をリセットしますか？')) {
+    if (checkedIDs[currentTab]) {
+      delete checkedIDs[currentTab];
+      localStorage.setItem('checkedIDs', JSON.stringify(checkedIDs));
+    }
+    renderAll();
+  }
+}
+
+// init
+buildCatFilter();
+initDB()
+  .then(() => loadAllAnswerMeta())
+  .then(() => renderAll())
+  .catch(() => renderAll()); // DB失敗時もUIは表示する
+</script>
+</body>
+</html>
