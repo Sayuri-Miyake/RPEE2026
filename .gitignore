@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# バックアップファイル
+physics_exam_backup_*.json
+
+# 回答ファイル（個人データ）
+qm_answers/
